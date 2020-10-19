@@ -13,4 +13,4 @@ let combinations = [
 const wall = new Wall(6, 3, matrix, 4, combinations)
 
 console.log(wall)
-console.log(wall.calculateBricks());
+console.log(wall.minusLines());

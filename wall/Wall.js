@@ -34,12 +34,35 @@ class Wall{
     }
     calculateBricks(){
         let arrayFullLines = this.searchFullLines();
-
         let a = this.combinations.filter(i => 
             i[0] <= arrayFullLines.length ||  i[1] <= arrayFullLines.length
         )
         a.map(i=> this.sortCombinations(i))
-        console.log(a)
+        return a
+        console.log(this.matrix[0].length);
+        /*if(a[a.length-1][2] === 0)
+        difference = this.matrix[0].length - a[a.length-1][0]
+        console.log(difference);*/
+    }
+
+    minusLines(){
+        let arrayFullLines = this.searchFullLines();
+        let arraySortCombynation = this.calculateBricks();
+        let difference;
+        for(let arrFullLine of arrayFullLines){
+            difference = this.matrix[arrFullLine].length;
+            for(let i = arraySortCombynation.length-1; i>=0; i--){
+                
+                    if((difference != 0) && (arraySortCombynation[i][2] != 0)){
+                            difference -= arraySortCombynation[i][0]
+                            arraySortCombynation[i][2] -= 1
+                            console.log("arrFullLine   ->  "+ arrFullLine+ "   arraySortCombynation[i]  ->  " + arraySortCombynation[i] + "   difference    ->   " + difference);
+
+                    }else
+                    console.log(arrayFullLines );     
+                
+            }
+        }
     }
 
     checkBlank(){
