@@ -7,74 +7,147 @@ class Wall{
     this.combinations = combinations
     } 
     
-    searchBlank(){
-        let setBlank = new Set();
+    build(){
+        console.log(`Loading....`);
+        setTimeout(()=>{
+            if(!this.validationMatrix()){
+                console.error(`Check the data: Matrix`);
+                return false
+            }
+            if(!this.validationCombinations()){
+                console.error(`Check the data: Combinations`);
+                return false
+            }
+            if(this.minusLines()){
+                if(this.calculateBlank()){
+                    console.log(`You can build this wall.
+                        Size  ------ ${this.W} x ${this.H},
+                        Plan  ------ ${this.matrix},
+                        Type Bricks -------- ${this.countTypeBricks},
+                    =====================================================
+                    You will have so many bricks left :
+                                ${this.combinations}
+                    `);
+                    return true
+                }
+            }
+            console.log();(`You cann't build this wall.
+                        Size  ------ ${this.W} x ${this.H},
+                        Plan  ------ ${this.matrix},
+                        Type Bricks -------- ${this.countTypeBricks},
+                    =====================================================`)
+            return false
+
+        }, 2000)
+        
+    }
+
+    searchBlank(){ 
+        let setBlank = [],
+            q = []
         for(let i = 0; i < this.matrix.length; i++){
             for(let k = 0; k < this.matrix[i].length; k++){
                 if( (this.matrix[i][k] === 0) || (this.matrix[i][k] === '0')){
-                    setBlank.add([i,k])
+                    setBlank.push(k)
                 } 
             }
         }
-       return setBlank
+        for(let i = 0; i<setBlank.length; i++){
+            if((i === 0) || (setBlank[i] <=  setBlank[i - 1]))
+                q.push(setBlank[i])
+            else
+                 q.push(setBlank[i] - (setBlank[i - 1]+1))  
+        }
+       return q
     }
 
-    searchFullLines(){
-        let a = this.matrix.map((item, index)=>{
+    calculateBlank(){ 
+        let setBlank = this.searchBlank()
+        let difference;
+        let sum = 0;
+        for(let i = 0; i < setBlank.length; i++){
+            difference = setBlank[i]
+            if(setBlank[i] === 0)
+                difference = this.matrix[0].length - 1 
+            while(difference != 0){
+                for(let k = this.combinations.length-1; k>=0; k--){
+                    while((this.combinations[k][2] != 0) && (this.combinations[k][0] <= difference)){
+                        console.log('difference (' + difference+') - combinations['+k+'][0] ('+this.combinations[k][0]+')')
+                        difference -= this.combinations[k][0]
+                        this.combinations[k][2] -= 1
+                        console.log('difference ' + difference)
+    					console.log('combinations['+k+'][2] ' + this.combinations[k][2])
+    					console.log('=============================')
+                    }
+                }
+                if(this.combinations[0][2] === 0)
+                { console.error("arraySortCombynation[0][2] === 0")
+                return false}
+                else setBlank[i] = 0
+            }
+        }
+        setBlank.map(item=>{sum+=item})
+        this.combinations = this.combinations.filter(item => item[2]!=0)
+        if(sum === 0)
+            return true;
+        return false    
+    }
+
+
+    searchFullLines(matrix){
+        let a = matrix.map((item, index)=>{
             let sum = 0
             for(let i of item){
                 sum+=i
-                if(sum === this.matrix[index].length)
+                if(sum === matrix[index].length)
                 return index
             }
         })
         a= a.filter(i=>i!=undefined)
-        console.log(a);
         return a
     }
     calculateBricks(){
-        let arrayFullLines = this.searchFullLines();
+        let arrayFullLines = this.searchFullLines(this.matrix);
         let a = this.combinations.filter(i => 
             i[0] <= arrayFullLines.length ||  i[1] <= arrayFullLines.length
         )
         a.map(i=> this.sortCombinations(i))
         return a
-        console.log(this.matrix[0].length);
-        /*if(a[a.length-1][2] === 0)
-        difference = this.matrix[0].length - a[a.length-1][0]
-        console.log(difference);*/
     }
 
     minusLines(){
-        let arrayFullLines = this.searchFullLines();
+        let arrayFullLines = this.searchFullLines(this.matrix);
         let arraySortCombynation = this.calculateBricks();
         let difference;
-        for(let arrFullLine of arrayFullLines){
-            difference = this.matrix[arrFullLine].length;
-            for(let i = arraySortCombynation.length-1; i>=0; i--){
-                
-                    if((difference != 0) && (arraySortCombynation[i][2] != 0)){
-                            difference -= arraySortCombynation[i][0]
-                            arraySortCombynation[i][2] -= 1
-                            console.log("arrFullLine   ->  "+ arrFullLine+ "   arraySortCombynation[i]  ->  " + arraySortCombynation[i] + "   difference    ->   " + difference);
-
-                    }else
-                    console.log(arrayFullLines );     
-                
-            }
+        let sum = 0;
+        for(let i = 0; i < arrayFullLines.length; i++){
+    		difference = 6;
+    		while(difference != 0){
+    			for(let k = arraySortCombynation.length-1; k>=0; k--){
+    				while ((arraySortCombynation[k][2] != 0)  && (arraySortCombynation[k][0] <= difference)) {
+    					console.log('difference (' + difference+') - combinations['+k+'][0] ('+arraySortCombynation[k][0]+')')
+    					difference -= arraySortCombynation[k][0]
+    					arraySortCombynation[k][2] -= 1
+    					console.log('difference ' + difference)
+    					console.log('combinations['+k+'][2] ' + arraySortCombynation[k][2])
+    					console.log('=============================')
+    				}
+                }
+                if(arraySortCombynation[0][2] === 0)
+                { console.error("arraySortCombynation[0][2] === 0")
+                break}
+                else arrayFullLines[i] = 0
+    		}
         }
+        arrayFullLines.map(item=>sum+=item)
+        arraySortCombynation=arraySortCombynation.filter(item => item[2]!=0)
+        if(sum === 0){
+            this.combinations = arraySortCombynation
+            return true;
+        }
+        return false      
     }
 
-    checkBlank(){
-        let setBlank = this.searchBlank()
-        let q = []
-        for(let [column, row] of setBlank){
-            console.log(row);
-            q = combinations.filter(item => 
-                item[0] <= row || item[1] <= row
-            )
-        }  
-    }
 
     validationPlace(){
         if ((this.W <=0) || (this.H <= 0)) {
