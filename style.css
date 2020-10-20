@@ -1,0 +1,59 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-size: 1rem;
+    line-height:  1.6;
+    background: #b9e2c4;
+    color: #333333;
+}
+a{
+    color: #333333;
+    text-decoration: none;
+}
+a:hover{
+    color: #666666;
+}
+ul{
+    list-style: none;   
+}
+input{
+    display: block;
+    width: 100%;
+    padding: .4rem;
+    font-size: 1.2rem;
+    border: 1px solid #ccc;
+    outline: none;
+    margin-bottom: .5rem;
+}
+.container{
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+    padding: 0 2rem;
+}
+.btn-component, .sizePlace-component, .matrix-component, .bricks-component{
+    width: 100%;
+    text-align: center;
+    margin: 15px 0;
+    
+}
+.btn-component .waves-effect{
+    width: 50%;
+    max-width: 300px;
+    border-radius: 10px;
+}
+.sizePlaceWidthErr, .sizePlaceHeightErr, .countTypeBricks{    display: none;}
+.error{
+    color: red;
+}
+.hint{
+    margin-top: 20px;
+    font-size: 1.3rem;
+}
+th{
+    border: 1px solid #333333;
+    cursor: pointer;
+}
