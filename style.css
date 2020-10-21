@@ -57,3 +57,7 @@ th{
     border: 1px solid #333333;
     cursor: pointer;
 }
+.exempleBricks{ margin-top: 5px; margin-bottom: 5px;}
+.good{
+    color: green;
+}

@@ -9,7 +9,6 @@ class Wall{
     
     build(){
         console.log(`Loading....`);
-        setTimeout(()=>{
             if(!this.validationMatrix()){
                 console.error(`Check the data: Matrix`);
                 return false
@@ -36,10 +35,7 @@ class Wall{
                         Plan  ------ ${this.matrix},
                         Type Bricks -------- ${this.countTypeBricks},
                     =====================================================`)
-            return false
-
-        }, 2000)
-        
+            return false  
     }
 
     searchBlank(){ 
@@ -121,7 +117,7 @@ class Wall{
         let difference;
         let sum = 0;
         for(let i = 0; i < arrayFullLines.length; i++){
-    		difference = 6;
+    		difference = this.matrix[0].length
     		while(difference != 0){
     			for(let k = arraySortCombynation.length-1; k>=0; k--){
     				while ((arraySortCombynation[k][2] != 0)  && (arraySortCombynation[k][0] <= difference)) {
